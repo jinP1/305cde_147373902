@@ -1,0 +1,495 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery Mobile Web App</title>
+<link href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="http://code.jquery.com/jquery-1.6.4.min.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js" type="text/javascript"></script>
+
+<script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTQfr2uqEyW2nD9hPcrtAcQK0bPwROmcQ">
+    </script>
+
+<!--
+<script>
+var myCenter=new google.maps.LatLng(22.196704,113.5395238);
+
+function initialize()
+{
+var mapProp = {
+  center:myCenter,
+  zoom:3,
+  mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+
+var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+var marker=new google.maps.Marker({
+  position:myCenter,
+  });
+
+marker.setMap(map);
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+-->
+
+<script>
+$(document).ready(function() {	
+
+
+	/*
+	fav={
+		po: function(cname){
+			//alert(cname);
+		   var URLs="getcn.php";			
+           var myData = {"cname": cname};
+		  // alert(JSON.stringify(myData));
+        // $.getJSON(URLs,myData, function(data){ 
+		  $.getJSON(URLs,JSON.stringify(myData), function(data){ 
+		// alert(JSON.stringify(myData));           
+			 $.each(data, function(i, row){
+			alert( row.cname);
+			 });
+			});
+
+		}}
+		});*/	
+		
+			fav={
+		po: function(cname){
+		    var URLs="getcn";
+          		
+            var myData = "cname="+ cname ; 
+			
+            $.ajax({
+                url: URLs,
+                data: myData,
+                type:"GET",
+                dataType:'text',
+
+                success: function(msg){
+			$("#sends").html("");
+					 
+					var obj = jQuery.parseJSON(msg);	
+					fav.cm(obj.id,"r");
+					$("#cmbtn").click(function() {
+					fav.cm(obj.id,"s");	
+					});
+					
+					/*								
+					$.each(obj, function(i, field){					
+						$("#sends").append( field.id);
+						$("#sends").append( "<br>");
+						$("#sends").append( field.cname);	
+						$("#sends").append( "<br>");
+						$("#sends").append( field.age);
+						$("#sends").append( "<br>");					
+						$("#sends").append( field.inf); 
+					});
+					*/
+					
+					
+					
+                 	$("#sends").append('<h1>\''+obj.cname+'\'</h1>');	
+					//$("#sends").append( obj.id);
+					//$("#sends").append( "<br>");
+					//$("#sends").append( obj.cname);	
+					$("#sends").append( "<br>");
+					$("#sends").append('<h1>AGE</h1>');
+					$("#sends").append( obj.age);
+					$("#sends").append( "<br>");
+					$("#sends").append('<h1>info</h1>');					
+					$("#sends").append( obj.inf); 
+					$("#sends").append( "<br>");
+				 	$("#sends").append( '<input type="button"  onClick="fav.po2(\''+obj.cname+'\')" value="add/delete to/form favour"> ');
+					fav.pos(obj.pox,obj.poy);
+					
+                          				
+					
+					
+                },
+
+                 error:function(xhr, ajaxOptions, thrownError){
+                    alert(xhr.status);
+                    alert(thrownError);
+                 }
+            });
+			},
+			
+			po2:function(cname){
+			//alert(cid);
+			
+			var URLs="fav";
+          		
+            var myData2 = "cname="+ cname ; 			
+            $.ajax({
+                url: URLs,
+                data: myData2,
+                type:"GET",
+                dataType:'text',
+
+                success: function(msg){
+				alert(msg);
+				}
+			
+			
+			});
+			},
+			
+			cm:function(cid,flag){
+			
+			
+			var URLs="cm";
+			var cmc =$("#cmt").val() ;
+            var myData = "cid="+ cid + "&cmc=" + cmc+ "&flag=" + flag; 	
+				             
+			//alert(cid+myData);
+			    $.ajax({
+                url: URLs,
+                data: myData,
+                type:"GET",
+                dataType:'text',
+
+                success: function(msg){
+				$("#sm").html("");
+				var obj = jQuery.parseJSON(msg);				
+				$.each(obj, function(i, field){	
+				//alert(field.cmc);
+						$("#sm").append( field.cmc);
+						$("#sm").append( "<br>");
+						$("#sm").append( field.time);	
+						$("#sm").append( "<br>");						 
+					});
+				}
+			
+			
+			});
+			},
+			
+	pos:function(x,y){
+			myCenter=new google.maps.LatLng(x,y);
+			
+			
+       
+
+var mapProp = {
+  center:myCenter,
+  zoom:3,
+  mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+
+var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+var marker=new google.maps.Marker({
+  position:myCenter,
+  });
+
+marker.setMap(map);
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+
+			}
+			
+
+
+}
+$("#abtn").click(function() {			
+			window.location.href = "4.psd";
+			});
+		
+			
+						
+			
+});
+
+
+        </script>
+</head> 
+<body> 
+
+<div data-role="page" id="page">
+	<div data-role="header">
+		<h1>Page One</h1>
+		
+	</div>
+    
+
+  <div data-role="main" class="ui-content">
+    <h2>Area</h2>
+    <p>In this example, we have used the data-filtertext="fav" on "Adele". This means that you are no longer able to search for the list item "Adele" anymore. You can only find Adele by typing the keywords "f, a, v or fav".)</p>
+    
+    <ul data-role="listview" data-filter="true" data-input="#myFilter" data-autodividers="true" data-inset="true">
+    
+    
+    <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">C</li>
+      <li><a href="#CentralAsia">Central Asia</a></li>
+      
+    <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">E</li>
+      <li><a href="#EastAsia">East Asia</a></li>
+      
+      <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">S</li>
+      <li><a href="#SoutheastAsia">Southeast Asia</a></li>
+      <li><a href="#SouthernAsia">Southern Asia</a></li> 
+           
+      <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">W</li>
+      <li><a href="#WesternAsia">Western Asia</a></li>	  
+	 
+	 <h4 align="center"><button id="abtn"> account </button></h4>
+      
+    </ul>
+  </div>
+</div> 
+  
+  
+  
+  
+</div> 
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+</div>
+
+<div data-role="page" id="EastAsia">
+	<div data-role="header">
+		<h1>East Asia</h1>
+	</div>
+	<div data-role="content">	
+     <ul data-role="listview" data-filter="true" data-input="#myFilter" data-autodividers="true" data-inset="true">
+		Content	
+        
+        <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">C</li>
+        <li><a href="#send" onClick="fav.po('China')">China</a></li>       
+        
+        <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">H</li>
+		<li><a href="#send" onClick="fav.po('HongKong')">HongKong</a></li>
+        
+        <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">M</li>
+		<li><a href="#send" onClick="fav.po('Macau')">Macau</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">J</li>
+		<li><a href="#send" onClick="fav.po('Japan')">Japan</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">M</li>
+		<li><a href="#send" onClick="fav.po('Mongolia')">Mongolia</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">N</li>
+		<li><a href="#send" onClick="fav.po('NorthKorea')">NorthKorea</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">S</li>
+		<li><a href="#send" onClick="fav.po('SouthKorea')">SouthKorea</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">T</li>
+		<li><a href="#send" onClick="fav.po('Taiwan')">Taiwan</a></li>	
+        
+	</div>
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+</div>
+
+
+
+
+<div data-role="page" id="SoutheastAsia">
+	<div data-role="header">
+		<h1>Southeast Asia東南亞</h1>
+	</div>
+	<div data-role="content">	
+     <ul data-role="listview" data-filter="true" data-input="#myFilter" data-autodividers="true" data-inset="true">
+		Content	
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">H</li>
+        <li><a href="#send" onClick="fav.po('Brunei')">Brunei</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">C</li>
+		<li><a href="#send" onClick="fav.po('Cambodia')">Cambodia</a></li>  
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">E</li>   
+		<li><a href="#send" onClick="fav.po('EastTimor')">EastTimor</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">I</li>
+		<li><a href="#send" onClick="fav.po('Indonesia')">Indonesia</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">L</li>
+		<li><a href="#send" onClick="fav.po('Laos')">Laos</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">M</li>
+		<li><a href="#send" onClick="fav.po('Malaysia')">Malaysia</a></li>
+		<li><a href="#send" onClick="fav.po('Myanmar')">Myanmar</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">P</li>
+		<li><a href="#send" onClick="fav.po('Philippines')">Philippines</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">S</li>
+		<li><a href="#send" onClick="fav.po('Singapore')">Singapore</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">T</li>
+		<li><a href="#send" onClick="fav.po('Thailand')">Thailand</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">V</li>
+		<li><a href="#send" onClick="fav.po('Vietnam')">Vietnam</a></li>	
+        
+	</div>
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+</div>
+
+
+
+
+<div data-role="page" id="SouthernAsia">
+	<div data-role="header">
+		<h1>Southern Asia</h1>
+	</div>
+	<div data-role="content">	
+     <ul data-role="listview" data-filter="true" data-input="#myFilter" data-autodividers="true" data-inset="true">
+		Content	
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">A</li>
+        <li><a href="#send" onClick="fav.po('Afghanistan')">Afghanistan</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">B</li>
+		<li><a href="#send" onClick="fav.po('Bangladesh')">Bangladesh</a></li>
+		<li><a href="#send" onClick="fav.po('Bhutan')">Bhutan</a></li> 
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">I</li>
+		<li><a href="#send" onClick="fav.po('India')">India</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">M</li>
+		<li><a href="#send" onClick="fav.po('Maldives')">Maldives</a></li> 
+         
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">N</li>
+		<li><a href="#send" onClick="fav.po('Nepal')">Nepal</a></li>  
+           
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">P</li>
+		<li><a href="#send" onClick="fav.po('Pakistan')">Pakistan</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">S</li>
+		<li><a href="#send" onClick="fav.po('SriLanka')">SriLanka</a></li>
+        	
+	</div>
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+</div>
+
+
+
+
+<div data-role="page" id="CentralAsia">
+	<div data-role="header">
+		<h1>Central Asia</h1>
+	</div>
+	<div data-role="content">	
+     <ul data-role="listview" data-filter="true" data-input="#myFilter" data-autodividers="true" data-inset="true">
+		Content		
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">K</li>
+        <li><a href="#send" onClick="fav.po('Kyrgyzstan')">Kyrgyzstan</a></li> 
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">T</li>
+		<li><a href="#send" onClick="fav.po('Tajikistan')">Tajikistan</a></li>      
+		<li><a href="#send" onClick="fav.po('Turkmenistan')">Turkmenistan</a></li>
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">U</li>
+		<li><a href="#send" onClick="fav.po('Uzbekistan')">Uzbekistan</a></li>
+        
+	</div>
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+</div>
+
+
+
+
+<div data-role="page" id="WesternAsia">
+	<div data-role="header">
+		<h1>Western Asia</h1>
+	</div>
+	<div data-role="content">	
+     <ul data-role="listview" data-filter="true" data-input="#myFilter" data-autodividers="true" data-inset="true">
+		Content	
+        
+         <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">B</li>
+      <li><a href="#send" onClick="fav.po('Bahrain')">Bahrain</a></li> 
+          
+       <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">I</li>
+	  <li><a href="#send" onClick="fav.po('Iran')">Iran</a></li>
+      <li><a href="#send" onClick="fav.po('Iraq')">Iraq</a></li>
+      <li><a href="#send" onClick="fav.po('Israel')">Israel</a></li>
+      
+       <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">J</li>
+      <li><a href="#send" onClick="fav.po('Jordan')">Jordan</a></li>
+      
+       <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">K</li>
+      <li><a href="#send" onClick="fav.po('Kuwait')">Kuwait</a></li>
+      
+       <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">L</li>
+      <li><a href="#send" onClick="fav.po('Lebanon')">Lebanon</a></li>  
+             
+       <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">O</li>
+      <li><a href="#send" onClick="fav.po('Oman')">Oman</a></li>      
+      
+       <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">P</li>
+      <li><a href="#send" onClick="fav.po('PalestineGazaStrip')">PalestineGazaStrip</a></li> 
+      
+       <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">Q</li>
+      <li><a href="#send" onClick="fav.po('Qatar')">Qatar</a></li>
+      
+       <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">S</li>
+      <li><a href="#send" onClick="fav.po('SaudiArabia')">SaudiArabia</a></li> 
+      <li><a href="#send" onClick="fav.po('Syria')">Syria</a></li>   
+      
+       <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">U</li>
+      <li><a href="#send" onClick="fav.po('UnitedArabEmirates')">UnitedArabEmirates</a></li>
+      
+       <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">Y</li>
+      <li><a href="#send" onClick="fav.po('Yemen')">Yemen</a></li>	
+      
+	</div>
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+</div>
+
+
+
+
+<div data-role="page" id="send">
+<div data-role="header">
+		<h1>info</h1>		
+	</div>
+
+<div data-role="content" id="sends">
+
+
+</div>
+
+<div id="googleMap" style="width:500px;height:380px;"></div>
+<hr>
+others comment
+<hr>
+
+<div id="sm" style="text-align:center;">
+
+    
+	
+  </div>
+  <h4 align="center">comment: <input type="text" id="cmt" /></h4>
+<h4 align="center"><button id="cmbtn"> submit </button></h4>
+</div>
+
+</div>
+
+
+</body>
+</html>
